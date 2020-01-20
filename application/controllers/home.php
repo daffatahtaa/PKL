@@ -46,13 +46,40 @@ class home extends CI_Controller {
 			$data['postData'] = $data;
 
 			$result['data']=$this->laporan->sp_bi($data);
+			//$query1 = $this->db->query("Select * from ABSENSI  WHERE KERJA_MASUK > '07.30.00'")->result();
+			//$query = $this->db->query("SELECT Count(KERJA_MASUK) AS IJIN FROM ABSENSI WHERE KERJA_MASUK = '00:00:00' ");//ijin
+			//foreach ($query->result_array() as $row){
+			//	echo $row['IJIN'];
+			//}
+			//$err = sqlsrv_errors();
+			//$user = $this->db['hostname']
+			//$f = sqlsrv_query($this->db[],$query1);
+			//var_dump($this->db);
 
+
+
+			//var_dump($query);
+			//echo $query['IJIN'];
+			//var_dump($err);
 			//var_dump($result['data']=$this->laporan->sp_bi($data));
 			//die();
 			//var_dump($result);
 			//var_dump($data);
 			//var_dump($this->load->database());
 			//var_dump($this->session->userdata);
+			//$connInfo = array("Database" => "1234_PRESENSI", "UID"=>"superadmin2", "PWD"=>"123qwe",'ReturnDatesAsStrings'=>true);
+			//$serverName = "DEKSTOP-DLHURVP";
+			//$conn = sqlsrv_connect($serverName, $connInfo);
+			//var_dump($conn);
+
+			//$query = $this->db->query("SELECT * FROM ABSENSI WHERE KERJA_MASUK >= '07.30.00'");
+			//foreach ($query->result_array() as $row){
+			//	echo $row['NAMA'];
+			//	echo $row['KERJA_MASUK'];
+			//	echo $row['UKER'];
+			//}
+
+			//die();
 
 			$this->load->view('templates/header',$data);
 			$this->load->view('templates/sidebar', $menu);
@@ -69,7 +96,7 @@ class home extends CI_Controller {
 			$data['posisi']=$posisi;
 			$data['pernr']='default';
 			$data['ket']='default';
-			//$result['data']=$this->laporan->sp_bi($data);
+			$result['data']=$this->laporan->sp_bi($data);
 			$result['postData'] = $data;
 
 			//var_dump($tahun);

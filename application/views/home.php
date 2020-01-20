@@ -55,25 +55,109 @@
 								</div>
 							</div>
 						</form>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-body">
 						<canvas id="myChart"></canvas>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-body">
+						<div class="card-body">
+							<div id="container" style="width: 100%; height: 700px;">
+								<script>
+									<?php
+									$query = $this->db->query("SELECT Count(KERJA_MASUK) AS IJIN FROM ABSENSI WHERE KERJA_MASUK = '00:00:00' ");//ijin
+									foreach ($query->result_array() as $row) {
+										//echo $row['IJIN'];
+									}
+									$query2 = $this->db->query("SELECT Count(KERJA_MASUK) AS MASUK FROM ABSENSI WHERE KERJA_MASUK <= '07:30:00'");//ijin
+									foreach ($query2->result_array() as $row2) {
+										//echo $row['MASUK'];
+									}
+									$query3 = $this->db->query("SELECT Count(KERJA_MASUK) AS TELAT FROM ABSENSI WHERE KERJA_MASUK > '07:30:00'");//ijin
+									foreach ($query3->result_array() as $row3) {
+										//echo $row['TELAT'];
+									}
+									?>
+									var myChart;
+									var options = {
+										chart: {
+											type: 'item',
+											renderTo: 'container'
+										},
+										title: {
+											text: 'Absensi'
+										},
+										series: [{
+											data: [
+												['Ijin',<?php echo $row['IJIN'] ?>],
+												['Masuk',<?php echo $row2['MASUK'] ?>],
+												['Telat',<?php echo $row3['TELAT'] ?>]
+											],
+											size: '80%',
+											startAngle: -180,
+											endAngle: 180
+										}]
+									};
+									myChart = Highcharts.chart(options);
+								</script>
+							</div>
+						</div>
 					</div>
 				</div>
 				<div class="card">
 					<div class="card-body">
 						<!--<h4 id="graphTitle">Chart Absensi</h4>-->
 						<br>
-						<canvas id="canvasBlock"></canvas>
+						<?php
+						$top = $this->db->query("select top 100 nama, kerja_masuk from absensi where kerja_masuk > '07:30:00' order by kerja_masuk desc");//top 100
+						?>
+						<style>
+							table, th, td {
+								border: 1px solid black;
+								border-collapse: collapse;
+							}
+
+							th, td {
+								padding: 5px;
+								text-align: left;
+								vertical-align: center;
+
+							}
+						</style>
+
+						<div class="inside">
+							<h4>Top 100 Telat</h4>
+							<table style="width: 50% ; border: 1px solid black;height: 100px" class="left">
+								<tr>
+									<th>Nama</th>
+									<?php foreach ($top->result_array() as $topVal) {
+										echo "<tr><td>" .$topVal['nama']. "</td></tr>";
+									};
+									?>
+								</tr>
+							</table>
+							<table class="right">
+								<tr>
+									<th>Jam Kerja Masuk</th>
+									<?php foreach ($top->result_array() as $topVal) {
+										echo "<tr><td>" .$topVal['kerja_masuk']. "</td></tr>";
+									};
+									?>
+								</tr>
+							</table>
+						</div>
 						<style type="text/css">
 							#canvasBlock {
 								height: 440px;
-								width: 882px;
-								border: 1px solid black;
+								width: 700px;
 							}
 
 							#myChart {
 								height: 440px;
-								width: 882px;
-								border: 1px solid black;
+								width: 700px;
 							}
 
 							#graphTitle {
@@ -81,11 +165,21 @@
 								font-size: 16px;
 							}
 
+							.left {
+								width: 50%;
+								float: left;
+							}
+							.right{
+								width: 50%;
+								float: right;
+							}
+
 						</style>
+						<!-- canvas bawawh
 						<script>
 							var ctx = document.getElementById('canvasBlock');
 							var myChart = new Chart(ctx, {
-								type: 'doughnut',
+								type: 'bar',
 								data: {
 									labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
 									datasets: [{
@@ -99,14 +193,7 @@
 											'rgba(153, 102, 255, 0.2)',
 											'rgba(255, 159, 64, 0.2)'
 										],
-										borderColor: [
-											'rgba(255, 99, 132, 1)',
-											'rgba(54, 162, 235, 1)',
-											'rgba(255, 206, 86, 1)',
-											'rgba(75, 192, 192, 1)',
-											'rgba(153, 102, 255, 1)',
-											'rgba(255, 159, 64, 1)'
-										],
+
 										borderWidth: 1
 									}]
 								},
@@ -128,12 +215,14 @@
 								}
 							});
 						</script>
+						-->
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
+<!--
 <script>
 	var ctx = document.getElementById("myChart").getContext('2d');
 	var myChart = new Chart(ctx, {
@@ -180,6 +269,7 @@
 		}
 	});
 </script>
+-->
 <script type="text/javascript">
 	var val3 = '<?php if ($postData) {
 		echo $postData['bulan'];
